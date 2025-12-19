@@ -1,0 +1,36 @@
+class Jar:
+    def __init__(self):
+        self.components = {}  # kind: amount
+        self.total_amount = 0
+
+    def add(self, kind, amount):
+        if kind in self.components:
+            self.components[kind] += amount
+        else:
+            self.components[kind] = amount
+        self.total_amount += amount
+
+    def pour_out(self, amount):
+        if amount >= self.total_amount:
+            self.components.clear()
+            self.total_amount = 0
+            return
+
+        ratio = (self.total_amount - amount) / self.total_amount
+        new_components = self.components.copy()
+
+        for kind, value in new_components.items():
+            self.components[kind] = value * ratio
+
+        self.total_amount -= amount
+
+    def get_total_amount(self):
+        return self.total_amount
+
+    def get_concentrations(self):
+        if self.total_amount == 0:
+            return {}
+        return {
+            kind: value / self.total_amount
+            for kind, value in self.components.items()
+        }
